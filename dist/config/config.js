@@ -25,6 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigServer = void 0;
 const dotenv = __importStar(require("dotenv"));
+const typeorm_naming_strategies_1 = require("typeorm-naming-strategies");
+//configuracion de varios entornos de ejecución
 class ConfigServer {
     constructor() {
         const nodeNameEnv = this.createPathEnv(this.nodeEnv);
@@ -49,6 +51,21 @@ class ConfigServer {
             arrEnv.unshift(...stringToArray);
         }
         return "." + arrEnv.join(".");
+    }
+    get typeORMConfig() {
+        return {
+            type: "mysql",
+            host: this.getEnviroment("DB_HOST"),
+            port: this.getNumerEnv("DB_PORT"),
+            username: this.getEnviroment("DB_USER"),
+            password: this.getEnviroment("DB_PASSWORD"),
+            database: this.getEnviroment("DB_DATABASE"),
+            entities: [__dirname + "/../**/*.entity{.ts,.js}"],
+            migrations: [__dirname + "../../migrations/*{.ts,.js}"],
+            synchronize: true,
+            logging: false,
+            namingStrategy: new typeorm_naming_strategies_1.SnakeNamingStrategy(),
+        };
     }
 }
 exports.ConfigServer = ConfigServer;
