@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductEntity = void 0;
 const category_entity_1 = require("../../category/entities/category.entity");
-const pruchase_product_entity_1 = require("../../details/entities/pruchase-product.entity");
+const purchase_product_entity_1 = require("../../details/entities/purchase-product.entity");
 const base_entity_1 = require("./../../config/base.entity");
 const typeorm_1 = require("typeorm");
 let ProductEntity = class ProductEntity extends base_entity_1.BaseEntity {
@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", category_entity_1.CategoryEntity)
 ], ProductEntity.prototype, "category", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => pruchase_product_entity_1.PurchaseProductEntity, (purchaseProducts) => purchaseProducts.product),
+    (0, typeorm_1.OneToMany)(() => purchase_product_entity_1.PurchaseProductEntity, (purchaseProducts) => purchaseProducts.product),
     __metadata("design:type", Array)
 ], ProductEntity.prototype, "purchaseProducts", void 0);
 exports.ProductEntity = ProductEntity = __decorate([

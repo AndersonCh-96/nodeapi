@@ -23,37 +23,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigServer = void 0;
-const dotenv = __importStar(require("dotenv"));
-const data_source_1 = require("./data.source");
-//configuracion de varios entornos de ejecución
-class ConfigServer {
-    constructor() {
-        const nodeNameEnv = this.createPathEnv(this.nodeEnv);
-        dotenv.config({
-            path: nodeNameEnv,
-        });
-    }
-    getEnviroment(k) {
-        return process.env[k];
-    }
-    getNumerEnv(k) {
-        return Number(this.getEnviroment(k));
-    }
-    get nodeEnv() {
-        var _a;
-        return ((_a = this.getEnviroment("NODE_ENV")) === null || _a === void 0 ? void 0 : _a.trim()) || "";
-    }
-    createPathEnv(path) {
-        const arrEnv = ["env"];
-        if (path.length > 0) {
-            const stringToArray = path.split(".");
-            arrEnv.unshift(...stringToArray);
-        }
-        return "." + arrEnv.join(".");
-    }
-    get initConnect() {
-        return data_source_1.AppDataSource.initialize();
-    }
-}
-exports.ConfigServer = ConfigServer;
+exports.AppDataSource = void 0;
+const typeorm_1 = require("typeorm");
+const dotEnv = __importStar(require("dotenv"));
+const typeorm_naming_strategies_1 = require("typeorm-naming-strategies");
+dotEnv.config({
+    path: process.env.NODE_ENV !== undefined
+        ? `.${process.env.NODE_ENV.trim()}.env`
+        : ".env",
+});
+const Config = {
+    type: "mysql",
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    entities: [__dirname + "/../**/*.entity{.ts,.js}"],
+    migrations: [__dirname + "/../migrations/*{.ts,.js}"],
+    synchronize: false,
+    migrationsRun: true,
+    logging: false,
+    namingStrategy: new typeorm_naming_strategies_1.SnakeNamingStrategy(),
+};
+exports.AppDataSource = new typeorm_1.DataSource(Config);
